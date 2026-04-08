@@ -19,10 +19,20 @@ interface TagProps {
 export function Tag({ variant = 'neutral', children, style }: TagProps) {
   return (
     <span
-      className="inline-flex items-center gap-[3px] text-[9.5px] font-medium
-                 tracking-[0.06em] uppercase px-[6px] py-[2px] rounded-[3px]
-                 whitespace-nowrap"
-      style={{ ...VARIANT_STYLES[variant], ...style }}
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: '3px',
+        fontSize: '9.5px',
+        fontWeight: 500,
+        letterSpacing: '0.06em',
+        textTransform: 'uppercase',
+        padding: '2px 6px',
+        borderRadius: '3px',
+        whiteSpace: 'nowrap',
+        ...VARIANT_STYLES[variant],
+        ...style,
+      }}
     >
       {children}
     </span>
@@ -57,7 +67,7 @@ export function PoliticianTags({
   if (tags.length === 0) return null
 
   return (
-    <div className="flex gap-1 flex-wrap">
+    <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
       {tags.map(t => (
         <Tag key={t.label} variant={t.variant}>{t.label}</Tag>
       ))}

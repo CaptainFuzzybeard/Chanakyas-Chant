@@ -40,7 +40,7 @@ export function StatBar({ value, label, showValue = true, showWindow, className 
   }, [value])
 
   return (
-    <div className={`flex items-center gap-2 ${className ?? ''}`}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
       {/* Label — each track has an InfoPop story */}
       {(() => {
         const trackKey: Record<string, keyof typeof INFO> = {
@@ -54,8 +54,7 @@ export function StatBar({ value, label, showValue = true, showWindow, className 
         const infoKey = trackKey[label]
         const labelEl = (
           <div
-            className="flex-shrink-0 text-[8.5px] font-medium tracking-[0.06em] uppercase"
-            style={{ color: 'var(--t3)', width: '64px' }}
+            style={{ flexShrink: 0, fontSize: '8.5px', fontWeight: 500, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--t3)', width: '64px' }}
           >
             {label}
           </div>
@@ -67,13 +66,13 @@ export function StatBar({ value, label, showValue = true, showWindow, className 
 
       {/* Bar */}
       <div
-        className="flex-1 rounded-sm overflow-hidden"
-        style={{ height: '3px', background: 'var(--bd0)' }}
+        style={{ flex: 1, borderRadius: '2px', overflow: 'hidden', height: '3px', background: 'var(--bd0)' }}
       >
         <div
           ref={fillRef}
-          className="h-full rounded-sm"
           style={{
+            height: '100%',
+            borderRadius: '2px',
             width: '0%',
             background: getBarColor(value),
           }}
@@ -83,8 +82,9 @@ export function StatBar({ value, label, showValue = true, showWindow, className 
       {/* Value */}
       {showValue && (
         <div
-          className="flex-shrink-0 text-right"
           style={{
+            flexShrink: 0,
+            textAlign: 'right',
             fontFamily: '"DM Mono", monospace',
             fontSize: '9.5px',
             color: 'var(--t2)',
@@ -98,8 +98,7 @@ export function StatBar({ value, label, showValue = true, showWindow, className 
       {/* Window label */}
       {showWindow && (
         <div
-          className="flex-shrink-0 text-right text-[8.5px]"
-          style={{ color: 'var(--t3)', width: '48px' }}
+          style={{ flexShrink: 0, textAlign: 'right', fontSize: '8.5px', color: 'var(--t3)', width: '48px' }}
         >
           {showWindow}
         </div>
@@ -125,26 +124,22 @@ export function PenaltyBar({ value, label }: { value: number; label: string }) {
   if (value <= 0) return null
 
   return (
-    <div className="flex items-center gap-2">
+    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
       <div
-        className="flex-shrink-0 text-[8.5px] font-medium tracking-[0.06em] uppercase"
-        style={{ color: 'rgba(212,90,90,0.7)', width: '64px' }}
+        style={{ flexShrink: 0, fontSize: '8.5px', fontWeight: 500, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'rgba(212,90,90,0.7)', width: '64px' }}
       >
         {label}
       </div>
       <div
-        className="flex-1 rounded-sm overflow-hidden"
-        style={{ height: '3px', background: 'var(--bd0)' }}
+        style={{ flex: 1, borderRadius: '2px', overflow: 'hidden', height: '3px', background: 'var(--bd0)' }}
       >
         <div
           ref={fillRef}
-          className="h-full rounded-sm"
-          style={{ width: '0%', background: 'var(--red)' }}
+          style={{ height: '100%', borderRadius: '2px', width: '0%', background: 'var(--red)' }}
         />
       </div>
       <div
-        className="flex-shrink-0 text-right"
-        style={{ fontFamily: '"DM Mono", monospace', fontSize: '9.5px', color: 'var(--red)', width: '20px' }}
+        style={{ flexShrink: 0, textAlign: 'right', fontFamily: '"DM Mono", monospace', fontSize: '9.5px', color: 'var(--red)', width: '20px' }}
       >
         −{Math.round(value)}
       </div>

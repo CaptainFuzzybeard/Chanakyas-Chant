@@ -28,7 +28,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   if (user) {
     const { data } = await supabase
       .from('users')
-      .select('party_name, subscription_tier')
+      .select('party_name, subscription_tier, onboarding_complete')
       .eq('id', user.id)
       .single()
     profile = data
@@ -36,13 +36,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
   return (
     <html lang="en">
-      <body className="min-h-screen" style={{ background: 'var(--bg0)', color: 'var(--t1)' }}>
+      <body style={{ background: 'var(--bg0)', color: 'var(--t1)', minHeight: '100vh' }}>
         {user && (
           <>
             <Nav
               partyName={profile?.party_name ?? ''}
               subscriptionTier={profile?.subscription_tier ?? 'free'}
               userId={user.id}
+              onboardingComplete={profile?.onboarding_complete ?? false}
             />
             <Ticker />
           </>

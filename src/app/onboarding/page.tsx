@@ -3,6 +3,7 @@
 import { useState, useTransition, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
+import { completeOnboarding } from '@/lib/actions/onboarding'
 
 type Step = 1 | 2 | 3 | 4
 
@@ -88,49 +89,15 @@ export default function OnboardingPage() {
   async function handleConfirm() {
     setSaving(true)
     setSaveError(null)
-    const supabase = createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) { router.push('/login'); return }
 
-    // Guard: check if user already has a cabinet (back-button / double-submit protection)
-    const { count: existingCount } = await supabase
-      .from('cabinets')
-      .select('id', { count: 'exact', head: true })
-      .eq('user_id', user.id)
-      .eq('is_active', true)
+    const result = await completeOnboarding(
+      partyName.trim(),
+      scope,
+      scope === 'state' ? scopeState : null,
+    )
 
-    if ((existingCount ?? 0) > 0) {
-      // Cabinet already exists — just update party name and send to card bank
-      await supabase.from('users').upsert({
-        id:                  user.id,
-        party_name:          partyName.trim(),
-        onboarding_complete: false,
-      })
-      startTransition(() => router.push('/card-bank?onboarding=1'))
-      return
-    }
-
-    const { error: profileError } = await supabase.from('users').upsert({
-      id:                  user.id,
-      party_name:          partyName.trim(),
-      onboarding_complete: false,
-    })
-    if (profileError) {
-      const msg = profileError.code === '23505'
-        ? 'That party name is already taken — go back and pick another.'
-        : 'Something went wrong. Please try again.'
-      setSaveError(msg)
-      setSaving(false)
-      return
-    }
-
-    const { data: cabinet, error: cabError } = await supabase
-      .from('cabinets')
-      .insert({ user_id: user.id, scope, scope_state: scope === 'state' ? scopeState : null })
-      .select('id')
-      .single()
-    if (cabError || !cabinet) {
-      setSaveError('Could not create your cabinet. Please try again.')
+    if (!result.success) {
+      setSaveError(result.error)
       setSaving(false)
       return
     }

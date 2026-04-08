@@ -13,8 +13,8 @@ interface TickerItem {
 /** Seed ticker with static items until real-time data arrives */
 const SEED_ITEMS: TickerItem[] = [
   { id: 's1', text: 'Live scores updating every 15 minutes',  direction: 'neutral' },
-  { id: 's2', text: 'Stake your conviction on this week\'s picks before Sunday', direction: 'neutral' },
-  { id: 's3', text: 'Scores move with verified governance outcomes — speeches don\'t count', direction: 'neutral' },
+  { id: 's2', text: "Stake your conviction on this week's picks before Sunday", direction: 'neutral' },
+  { id: 's3', text: "Scores move with verified governance outcomes — speeches don't count", direction: 'neutral' },
   { id: 's4', text: 'Defection alert: watch your roster — transfers open 72h after a defection', direction: 'neutral' },
   { id: 's5', text: 'Coalition scores update at every Monday rank lock', direction: 'neutral' },
 ]
@@ -25,7 +25,6 @@ export function Ticker() {
   useEffect(() => {
     const supabase = createClient()
 
-    // 1. Fetch most recent ticker events on mount
     supabase
       .from('ticker_events')
       .select('*')
@@ -44,7 +43,6 @@ export function Ticker() {
         }
       })
 
-    // 2. Subscribe to new ticker events via Realtime
     const channel = supabase
       .channel('ticker-events')
       .on(
@@ -54,7 +52,7 @@ export function Ticker() {
           const event = payload.new as TickerEvent
           setItems(prev => [
             { id: event.id, text: event.ticker_text, direction: event.delta_direction },
-            ...prev.slice(0, 29), // Keep max 30 items
+            ...prev.slice(0, 29),
           ])
         }
       )
@@ -63,24 +61,37 @@ export function Ticker() {
     return () => { supabase.removeChannel(channel) }
   }, [])
 
-  // Duplicate for seamless CSS loop
+  // Duplicate for seamless CSS scroll loop
   const displayed = [...items, ...items]
 
   return (
     <div
-      className="flex items-center overflow-hidden"
       style={{
         height: '34px',
-        background: 'var(--bg1)',
-        borderBottom: '0.5px solid var(--bd0)',
+        background: 'var(--navy)',
+        borderBottom: '0.5px solid rgba(255,255,255,0.06)',
+        display: 'flex',
+        alignItems: 'center',
+        overflow: 'hidden',
+        position: 'relative',
+        flexShrink: 0,
       }}
     >
       {/* LIVE label */}
       <div
-        className="flex-shrink-0 flex items-center gap-[6px] px-[13px] h-full text-[9px] font-bold tracking-[0.12em] uppercase"
         style={{
-          color: 'var(--amber)',
-          borderRight: '0.5px solid var(--bd-a)',
+          flexShrink: 0,
+          display: 'flex',
+          alignItems: 'center',
+          gap: '6px',
+          padding: '0 13px',
+          height: '100%',
+          fontSize: '9px',
+          fontWeight: 600,
+          letterSpacing: '0.12em',
+          textTransform: 'uppercase',
+          color: 'var(--amber-b)',
+          borderRight: '0.5px solid rgba(201,148,26,0.3)',
         }}
       >
         <span className="live-dot" />
@@ -88,19 +99,25 @@ export function Ticker() {
       </div>
 
       {/* Scrolling track */}
-      <div className="overflow-hidden flex-1">
+      <div style={{ overflow: 'hidden', flex: 1 }}>
         <div
-          className="flex whitespace-nowrap animate-ticker"
-          style={{ willChange: 'transform' }}
+          className="animate-ticker"
+          style={{
+            display: 'flex',
+            whiteSpace: 'nowrap',
+            willChange: 'transform',
+          }}
         >
           {displayed.map((item, i) => (
             <span
               key={`${item.id}-${i}`}
-              className="text-[11px] px-[22px]"
               style={{
+                fontSize: '11px',
                 fontFamily: '"DM Mono", "Fira Code", monospace',
-                color: 'var(--t2)',
-                borderRight: '0.5px solid var(--bd0)',
+                padding: '0 22px',
+                borderRight: '0.5px solid rgba(255,255,255,0.06)',
+                color: 'rgba(255,255,255,0.5)',
+                flexShrink: 0,
               }}
             >
               <span
@@ -108,7 +125,7 @@ export function Ticker() {
                   color:
                     item.direction === 'positive' ? 'var(--green)'
                     : item.direction === 'negative' ? 'var(--red)'
-                    : 'var(--t2)',
+                    : 'rgba(255,255,255,0.5)',
                 }}
               >
                 {item.text}

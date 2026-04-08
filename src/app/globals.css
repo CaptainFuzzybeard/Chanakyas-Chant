@@ -5,17 +5,22 @@
 @tailwind utilities;
 
 :root {
-  --bg0: #0c0c0a; --bg1: #131310; --bg2: #1a1a17; --bg3: #222220;
-  --t1: #ece8dc; --t2: #9a9588; --t3: #5c5850;
-  --amber: #d4920a; --amber-b: #f5a623; --amber-d: #7a5205;
-  --amber-g: rgba(212,146,10,0.08);
-  --green: #4e9e6e; --gold: #c8882a; --red: #a83232;
-  --bd0: rgba(236,232,220,0.06); --bd1: rgba(236,232,220,0.11);
-  --bd2: rgba(236,232,220,0.20); --bd-a: rgba(212,146,10,0.30);
+  --bg0: #EDECE6; --bg1: #FAF7F2; --bg2: #F0EBE1; --bg3: #E8E2D8; --bg4: #DDD7CC;
+  --t1: #1A1208; --t2: #5A4E3A; --t3: #8B7D6B; --t4: #C4B8A8;
+  --amber: #C9941A; --amber-b: #E8642A; --amber-d: #7A4A10;
+  --amber-g: rgba(232,100,42,0.08);
+  --green: #1B6B3A; --gold: #C9941A; --red: #C0392B;
+  --bd0: rgba(26,18,8,0.08); --bd1: rgba(26,18,8,0.14);
+  --bd2: rgba(26,18,8,0.22); --bd-a: rgba(201,148,26,0.35);
+  --navy: #0F1B2D; --navy-m: #1E2D42;
+  --fd: 'Playfair Display', Georgia, serif;
+  --fb: 'DM Sans', system-ui, sans-serif;
+  --fm: 'DM Mono', 'Fira Code', monospace;
+  --r4: 4px; --r8: 8px; --r12: 12px; --r14: 14px;
 }
 
 html { -webkit-font-smoothing: antialiased; }
-body { background: var(--bg0); color: var(--t1); font-family: 'DM Sans', system-ui, sans-serif; }
+body { background: var(--bg0); color: var(--t1); font-family: var(--fb); }
 
 ::-webkit-scrollbar { width: 3px; height: 3px; }
 ::-webkit-scrollbar-track { background: transparent; }
